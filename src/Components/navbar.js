@@ -5,7 +5,12 @@ import { useGlobalContext } from "./context";
 
 const Container = styled.div`
 display:flex;
-justify-content:space-between
+justify-content:space-between;
+
+
+h2{
+    color:purple
+}
 `
 
 const Button = styled.button`
@@ -36,7 +41,6 @@ export default function Navbar(){
 
     return(
         <Container>
-            {console.log("showModal in Nav: ", showModal)}
             <h2> ContemplateExpanse </h2>
             <Button onClick={handleModal}> Add Money</Button>
         </Container>

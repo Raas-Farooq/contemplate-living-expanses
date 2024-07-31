@@ -8,15 +8,19 @@ const GlobalState = ({children}) => {
     const [showModal, setShowModal] = useState(false);
     const [income, setIncome] = useState(0);
     const [expanse, setExpanse] = useState(0);
-
-
+    const [incomeList, setIncomeList] = useState([]);
+    const [expenseList, setExpenseList] = useState([]);
     return <AppContext.Provider value={{
         setShowModal,
         showModal,
         setExpanse,
         expanse,
         income,
-        setIncome
+        setIncome,
+        setIncomeList,
+        incomeList,
+        expenseList,
+        setExpenseList
     }} >
 
         {children}

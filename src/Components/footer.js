@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {styled} from 'styled-components';
 import { useGlobalContext } from "./context";
 
@@ -33,17 +33,26 @@ p{
 
 export default function Footer(){
 
-    const {income, expanse} = useGlobalContext();
+    const {income, expanse,incomeList, expenseList} = useGlobalContext();
 
+    useEffect(() => {
+        console.log("incomeList; in Footer", income + 'expense: ', expanse);
+    }, [income, incomeList])
     return(
         <Container>
             <IncomeSection>
                 <h3> Income</h3>
-                <p> ${income} </p>
+                {incomeList.map((income,IND) => (
+                    <p key={IND}> ${income} </p>
+                ))}
+                
             </IncomeSection>
             <ExpanseSection>
                 <h3> Expanse</h3>
-                <p> ${expanse} </p>
+                {expenseList.map((expense, index) => (
+                    <p key={index}> ${expense} </p>
+                ))}
+                
             </ExpanseSection>
         </Container>
        

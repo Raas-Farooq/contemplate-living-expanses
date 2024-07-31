@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useGlobalContext } from "./context";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const ModalParent = styled.div`
 position:fixed;
@@ -33,7 +33,28 @@ p{
 
 input{
     height:30px;
+    
 }
+`
+
+const DetailBox = styled.input`
+padding:5px;
+&:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+  
+  `
+
+const InputMoney = styled.input`
+padding:5px;
+&:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
 `
 const RadioBtns = styled.div`
 display:flex;
@@ -83,19 +104,33 @@ box-shadow:0 2px 5px;
 
 
 
-const Modal = () => {
 
-    const {showModal, setShowModal, income, setIncome, expanse, setExpanse} = useGlobalContext();
+const Modal = () => {
+    const detailRef = useRef(null);
+    const {setExpenseList, setIncomeList, incomeList, showModal, setShowModal, setIncome, setExpanse} = useGlobalContext();
     const [message, setMessage] = useState('');
     const [transactionAmount, setTransactionAmount] = useState(0);
     // const [localExpanse, setLocalExpanse] = useState('');
     const [transactionType, setTransactionType] = useState(false);
     const [transactionDetails, setTransactionDetails] = useState('');
+    
+    useEffect(() => {
+        console.log("modal useEffect income List: ", incomeList);
+        if(showModal && detailRef.current){
+            console.log("detailRef ran", detailRef.current)
+            detailRef.current.focus();
+        }
+
+        setTimeout(() => {
+            if (detailRef.current) {
+              detailRef.current.focus();
+            }
+          }, 100);
+    },[showModal, incomeList]);
 
 
-    console.log("Show modal ", showModal);
     const closeModal = () => {
-
+        
         setShowModal(!showModal);
         setTransactionAmount('');
         setTransactionType(false);
@@ -120,11 +155,15 @@ const Modal = () => {
         }  
         if(transactionType === 'expanse' && transactionAmount || transactionType==='income' && transactionAmount) {
             if(transactionType === 'expanse'){
-                setExpanse(transactionAmount);
+                const myFloat = parseFloat(transactionAmount);
+                setExpenseList(prev => [...prev, myFloat]);
+                setExpanse(prev => prev+myFloat);
                 closeModal();
             }
             else{
-                setIncome(transactionAmount);
+                const myFloat = parseFloat(transactionAmount);
+                setIncomeList(prev => ([...prev, myFloat]))
+                setIncome(prev => prev + myFloat);
                 closeModal();
             }
         }
@@ -143,7 +182,10 @@ const Modal = () => {
             <div>Write the details </div>
             <p> {message}</p>
 
-            <input type='text' name="details" 
+            <DetailBox
+            ref={detailRef} 
+            type='text' 
+            name="details" 
             placeholder="Enter transaction Detials"
             onChange={(e) => setTransactionDetails(e.target.value)}
             value ={transactionDetails}
@@ -152,8 +194,8 @@ const Modal = () => {
                 Enter the Transaction Amount
             </h5>
 
-            <input type='text' name="income" 
-            placeholder="Enter the Money"
+            <InputMoney type='number' name="income" 
+            placeholder="Enter Money(*only Numbers)"
             onChange={(e) => setTransactionAmount(e.target.value)}
             value={transactionAmount} />
 
