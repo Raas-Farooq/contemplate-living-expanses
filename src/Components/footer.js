@@ -1,5 +1,7 @@
 import React from "react";
 import {styled} from 'styled-components';
+import { useGlobalContext } from "./context";
+
 
 const Container = styled.div`
 width:100%;
@@ -31,15 +33,17 @@ p{
 
 export default function Footer(){
 
+    const {income, expanse} = useGlobalContext();
+
     return(
         <Container>
             <IncomeSection>
                 <h3> Income</h3>
-                <p> 1000 </p>
+                <p> ${income} </p>
             </IncomeSection>
             <ExpanseSection>
                 <h3> Expanse</h3>
-                <p> 800 </p>
+                <p> ${expanse} </p>
             </ExpanseSection>
         </Container>
        
